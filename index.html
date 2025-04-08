@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>GEOMAP 2.0</title>
+    <link rel="icon" href="./assets/favicon.ico" sizes="16x16" type="image/ico">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.1.18/jquery.backstretch.min.js"></script>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .fullBackground {
+      background-position: center center;
+      background-attachment: fixed;
+      background-size: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .caption {
+      font-size: 30pt;
+      text-transform: uppercase;
+      color: #fff;
+      transform: translate(-50%, -50%);
+    }
+
+    .caption:after {
+      content:"\A";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background: #00bbeb;
+      display: inline-block;
+      margin: 0 0 -2px;
+    }
+    
+    .container-login{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+    }
+    
+    .col-side-login {
+        width: 20%;
+        background-color: transparent;
+        height: 85vh;
+        z-index: 100;
+        display:flex;
+        justify-content: flex-end;
+    }
+    
+    .col-center-login {
+        width: 60%;
+        background-color: transparent;
+        height: 85vh;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    .block-login {
+        background-color: rgba(255,255,255,0.7);
+        width: 100%;
+        height: 15vh;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        animation: fadeIn 0.8s ease forwards;
+    }
+    
+    .block-login-center {
+        background-color: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        transition: all 0.3s ease;
+        width: 100%;
+        height: auto;
+        min-height: 45vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+        padding: 25px 0;
+        animation: fadeIn 1s ease 0.3s forwards;
+        opacity: 0;
+    }
+    
+    .form-check {
+        padding-left: 1.5rem;
+    }
+
+    .form-check-input {
+        margin-top: 0.25rem;
+    }
+
+    .form-check-label {
+        font-size: 0.9rem;
+    }
+
+    .wrapper-fields {
+        padding: 10px 15px;
+    }
+
+    .space2 {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .block-login-center:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+    
+    .wrapper-fields {
+        width: 80%;
+    }
+    
+    .block-login h1 {
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 700;
+    font-size: 3em;
+    color: black;
+    }
+    
+    .login-subtitle {
+        font-family: 'Roboto';
+        font-size: 1.2em;
+        font-weight: normal;
+        color: black;
+    }
+    
+    .login-footer {
+        font-family: 'Roboto';
+        font-size: 1.2em;
+        font-weight: normal;
+        color: black;
+    }
+
+    .logo {
+        width: 160px;
+        padding: 10px 0px;
+    }
+    
+    .wrapper-logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .top-left-logo {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        padding: 10px;
+    }
+    
+    .top-left-logo img {
+        width: 120px;
+    }
+
+    .has-float-label {
+        position: relative;
+        margin-bottom: 15px;
+        transition: transform 0.3s;
+    }
+    
+    .has-float-label:focus-within {
+        transform: scale(1.02);
+    }
+    
+    .has-float-label label {
+        position: absolute;
+        left: 10px;
+        top: 0;
+        cursor: text;
+        font-size: 14px;
+        opacity: 1;
+        transition: all .2s;
+        top: -0.5em;
+        left: 0.75rem;
+        z-index: 3;
+        line-height: 1;
+        padding: 0 1px;
+        background-color: white;
+    }
+    
+    .has-float-label input:placeholder-shown:not(:focus) + label {
+        font-size: 14px;
+        opacity: 0.5;
+        top: 0.8em;
+    }
+    
+    .has-float-label input:focus {
+        outline: none;
+        border-color: rgba(0,0,0,.5);
+    }
+    
+    .has-float-label input:focus + label {
+        opacity: 1;
+        color: #007bff;
+        font-size: 14px;
+        top: -0.5em;
+        font-weight: 600;
+    }
+    
+    .form-control {
+        display: block;
+        width: 100%;
+        height: calc(2.25rem + 2px);
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 12px 15px;
+        transition: all 0.3s;
+    }
+    
+    .form-control:focus {
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    }
+    
+    .btn-login {
+        background: linear-gradient(45deg, #007bff, #00c6ff);
+        color: white;
+        border: none;
+        border-radius: 30px;
+        padding: 12px;
+        font-weight: 500;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    }
+    
+    .btn-login:hover {
+        background: linear-gradient(45deg, #0056b3, #007bff);
+        box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
+        transform: translateY(-2px);
+    }
+    
+    .btn-no-radius {
+        border-radius: 30px;
+    }
+    
+    .space2 {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    @media (max-width: 991px) {
+        .container-login{
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+        
+        .col-side-login {
+            width: 100%;
+            height: 15vh;
+            display:flex;
+            justify-content: center;
+            z-index: 120;
+        }
+        
+        .col-center-login {
+            width: 90%;
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 120;
+        }
+        
+        .block-social {
+            margin-top: 10px;
+            width: 90%;
+            height: 10vh;
+            display:flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+        
+        .linha-social {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .col-side-login.side-top {
+            height: 5vh;
+        }
+        
+        .login-subtitle {
+            font-family: 'Roboto';
+            font-size: 1.2em;
+            font-weight: normal;
+            color: black;
+            text-align: center;
+            padding: 0 5px 12px 5px;
+        }
+        
+        .wrapper-fields {
+            width: 90%;
+        }
+        
+        .btn-login {
+            width: 100%;
+        }
+        
+        .block-login-center {
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+        
+        .block-login h1 {
+            font-size: 2em;
+        }
+        
+        .login-footer {
+            font-size: 1.1em;
+        }
+        
+        .top-left-logo {
+            top: 10px;
+            left: 10px;
+        }
+        
+        .top-left-logo img {
+            width: 100px;
+        }
+    }
+
+    @media (min-width: 992px) AND (max-width: 1199px) {
+        .col-side-login {
+            width: 20%;
+            background-color: transparent;
+            height: 85vh;
+            z-index: 100;
+            display:flex;
+            justify-content: center;
+        }
+        
+        .col-center-login {
+            width: 60%;
+            background-color: transparent;
+            height: 85vh;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .block-login h1 {
+            font-size: 1.8em;
+        }
+    }
+
+    .bg_video {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    min-width: 100%; 
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    object-fit: cover;
+    background-color: black;
+}
+
+    /* Animações para elementos da página */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop id="bgVideo" class="bg_video">
+        <source src="./assets/background/background.mov" type="video/quicktime">
+        <!-- Fallback para navegadores que não suportam .mov -->
+        <source src="./assets/background/background.mp4" type="video/mp4">
+        Seu navegador não suporta vídeos HTML5.
+    </video>
+
+<!-- Adicionando o logo no canto superior esquerdo -->
+<div class="top-left-logo">
+    <img src="./assets/logo.png" alt="Logo Geometrisa">
+</div>
+
+<section class="container">
+    <div class="container-login">
+        <div class="col-side-login side-top"></div>
+        
+        <div class="col-center-login">
+            <div class="block-login">
+                <h1>GEOMAP 2.0</h1>
+                <span class="login-subtitle">Sistema de Mapeamento Geográfico e Gestão de Dados Espaciais</span>
+            </div>
+            
+            <form role="form" id="loginForm">
+                <div class="block-login-center">
+                    <!-- Removido o wrapper-logo daqui -->
+                    <div id="loginErrorMessage" class="alert alert-danger" style="display: none; width: 100%; margin-bottom: 15px; padding: 8px; text-align: center; color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; border-radius: 5px;">
+                        <i class="fas fa-exclamation-circle"></i> Login ou senha incorretos
+                    </div>
+                    <div class="wrapper-fields">
+    <!-- Campo de Login melhorado -->
+    
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+        </div>
+        <input type="text" class="form-control" id="login" name="login" placeholder="Login">
+    </div>
+    
+    <!-- Campo de Senha melhorado -->
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+        </div>
+        <input type="password" class="form-control" id="senha" name="senha" placeholder="Senha">
+        <div class="input-group-append">
+            <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+                <i class="fas fa-eye"></i>
+            </span>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="rememberMe">
+            <label class="form-check-label" for="rememberMe">Manter conectado</label>
+        </div>
+        <a href="#" class="text-primary">Esqueci minha senha</a>
+    </div>
+    <!-- Mantenha seu botão original -->
+    <button type="submit" class="btn btn-primary col-md-12 btn-no-radius btn-login">Entrar</button>
+</div>
+
+<!-- Adicione este CSS ao seu estilo existente -->
+<style>
+    /* Estilo para os campos de entrada */
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-color: #ced4da;
+    }
+    
+    .input-group .form-control {
+        border-left: none;
+        height: 45px;
+    }
+    
+    .input-group .form-control:focus {
+        box-shadow: none;
+        border-color: #ced4da;
+        border-left: none;
+    }
+    
+    .input-group-prepend .input-group-text {
+        border-right: none;
+    }
+    
+    .input-group-append .input-group-text {
+        border-left: none;
+    }
+    
+    /* Efeito hover nos campos */
+    .input-group:hover .input-group-text,
+    .input-group:hover .form-control {
+        border-color: #adb5bd;
+    }
+    
+    /* Efeito focus nos campos */
+    .input-group .form-control:focus + .input-group-append .input-group-text,
+    .input-group-prepend .input-group-text + .form-control:focus {
+        border-color: #80bdff;
+    }
+    
+    .input-group-prepend .input-group-text i,
+    .input-group-append .input-group-text i {
+        color: #6c757d;
+    }
+</style>
+
+<!-- Adicione este JavaScript para o toggle de visualização da senha -->
+<script>
+$(document).ready(function() {
+    $('#togglePassword').click(function() {
+        const passwordField = $('#senha');
+        const passwordFieldType = passwordField.attr('type');
+        
+        if (passwordFieldType === 'password') {
+            passwordField.attr('type', 'text');
+            $(this).find('i').removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            passwordField.attr('type', 'password');
+            $(this).find('i').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    });
+});
+</script>
+<div class="social-login mt-4">
+    <p class="text-center mb-3">Ou entre com</p>
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn btn-outline-primary mx-2">
+            <i class="fab fa-google"></i> Google
+        </button>
+        <button type="button" class="btn btn-outline-primary mx-2">
+            <i class="fab fa-microsoft"></i> Microsoft
+        </button>
+    </div>
+</div>
+<!-- Adicione este JavaScript para o toggle de visualização da senha -->
+<script>
+$(document).ready(function() {
+    $('.toggle-password').click(function() {
+        const passwordField = $('#senha');
+        const passwordFieldType = passwordField.attr('type');
+        
+        if (passwordFieldType === 'password') {
+            passwordField.attr('type', 'text');
+            $(this).find('i').removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            passwordField.attr('type', 'password');
+            $(this).find('i').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    });
+});
+</script>
+                </div>
+            </form>            <div class="block-login">
+                <div class="login-footer"><b>Geometrisa Serviços de Engenharia Ltda.</b></div>
+                <div class="login-footer">Tel.: (18) 99739-2680</div>
+                <div class="login-footer">E-mail: contato@geometrisa.com.br</div>
+            </div>
+        </div>
+        
+        <div class="col-side-login">
+            <div class="block-social">
+                 <!--
+                <div class="linha-social">
+                    <a href="https://www.linkedin.com/company/geometrisasegbar" target="_blank"><i class="fab fa-linkedin fa-2x" style="color: #0077B5;"></i></a>
+                    <a href="mailto:contato@geometrisa.com.br" target="_blank"><i class="fas fa-envelope fa-2x" style="color: #D44638;"></i></a>
+                </div>
+                <div class="linha-social">
+                    <a href="https://www.facebook.com/geometrisa" target="_blank"><i class="fab fa-facebook fa-2x" style="color: #1877F2;"></i></a>
+                    <a href="https://wa.me/5518997250913" target="_blank"><i class="fab fa-whatsapp fa-2x" style="color: #25D366;"></i></a>
+                </div>
+            </div>
+              -->
+        </div>
+    </div>
+</section>
+	<script src="https://unpkg.com/jquery.fullscreen@0.6.0/jquery.fullscreen.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			// Imagens para o slideshow
+			$.backstretch([
+			'./assets/background/map1.jpg',
+									'./assets/background/map2.jpg',
+									'./assets/background/map3.jpg',
+			], {
+				duration: 7000,
+				fade: 1000
+			});
+		
+			// Manipular o envio do formulário
+			$('#loginForm').on('submit', function(e) {
+				e.preventDefault();
+			
+				const username = $('#login').val();
+				const password = $('#senha').val();
+			
+				// Validação simples
+				if (username === 'admin' && password === 'admin') {
+					window.location.href = 'GEOMAP.html';
+				} else {
+					// Mostrar a mensagem de erro - usando jQuery para garantir que funcione
+					$('#loginErrorMessage').show();
+					console.log('Mostrando mensagem de erro'); // Para debug
+				
+					// Limpar o campo de senha
+					$('#senha').val('');
+				
+					// Focar no campo de login
+					$('#login').focus();
+				}
+			});
+		});
+	</script>
+	<!-- Adicione esta animação de shake ao seu CSS -->
+	<style>
+	@keyframes shake {
+					0%, 100% { transform: translateX(0); }
+					10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+					20%, 40%, 60%, 80% { transform: translateX(10px); }
+	}
+	</style>
+	
